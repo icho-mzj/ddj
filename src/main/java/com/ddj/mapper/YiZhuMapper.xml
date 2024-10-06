@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.ddj.mapper.YiZhuMapper">
+
+    <insert id="insertAll" parameterType="com.ddj.entity.YiZhuEntity">
+        insert into yizhu_source values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+             #{item.date},
+             #{item.bingqu},
+             #{item.zhuyuanhao},
+             #{item.yizhu},
+             #{item.buhelileixing},
+             #{item.heliyizhu},
+             #{item.yisheng},
+             #{item.beizhu},
+             #{item.jiluren}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByYearAndMonth" parameterType="String">
+        delete from yizhu_source where date like CONCAT(#{item},'%')
+    </delete>
+
+</mapper>
