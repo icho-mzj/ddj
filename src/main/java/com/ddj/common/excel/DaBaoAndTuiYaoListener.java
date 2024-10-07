@@ -33,6 +33,8 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
     @Autowired
     private DaBaoAndTuiYaoService service;
 
+    String date1 = "";
+
     /**
      * 每隔100条存储数据库，然后清理list ，方便内存回收
      */
@@ -58,6 +60,7 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
 
     void setData(Map<Integer, String> data) {
         Arrays.stream(KeShiEnum.values()).forEach(v->list2.add(v.toString()));
+        date1 = DateUtils.cleaning(data.get(0));
         for (int i = 0; i < list2.size(); i++) {
             DaBaoAndTuiYaoSource s = new DaBaoAndTuiYaoSource();
             s.setKeshi(list2.get(i));
@@ -65,7 +68,7 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
             if (value==null) value = "0";
             s.setValue(Integer.valueOf(value));
             s.setType(service.getType());
-            s.setDate(DateUtils.cleaning(data.get(0)));
+            s.setDate(date1);
             list1.add(s);
         }
     }
@@ -73,6 +76,8 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
         if (!list1.isEmpty()){ mapper.insertAll(list1);}
+        // 插入数据到详情表
+        mapper.insertInfo(DateUtils.getYearAndMonth(date1),service.getType());
         log.info("数据存储完成！");
     }
 }

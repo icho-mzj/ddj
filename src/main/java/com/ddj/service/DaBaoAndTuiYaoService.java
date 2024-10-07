@@ -4,9 +4,11 @@ import com.alibaba.excel.EasyExcel;
 import com.ddj.common.DateUtils;
 import com.ddj.common.constant.ResponseEntity;
 import com.ddj.common.excel.DaBaoAndTuiYaoListener;
+import com.ddj.entity.DaBaoAndTuiYaoInfo;
 import com.ddj.entity.DaBaoAndTuiYaoSource;
 import com.ddj.mapper.DaBaoAndTuiYaoMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,20 +52,23 @@ public class DaBaoAndTuiYaoService {
     }
 
     public Object getData(String date, String type) {
-        List<DaBaoAndTuiYaoSource> list = mapper.getData(date, type);
+        List<DaBaoAndTuiYaoInfo> list = mapper.getInfo(date, type);
         System.out.println("list = " + list);
         List<String> keshiList = new ArrayList<>();
         List<Integer> valueList = new ArrayList<>();
-        List<String> rateList = new ArrayList<>();
-        for (DaBaoAndTuiYaoSource s : list) {
+        List<Double> rateList = new ArrayList<>();
+        List<Integer> rankList = new ArrayList<>();
+        for (DaBaoAndTuiYaoInfo s : list) {
             keshiList.add(s.getKeshi());
             valueList.add(s.getValue());
-            rateList.add(s.getRate() + "%");
+            rateList.add(s.getRate());
+            rankList.add(s.getRank());
         }
         Map<String, Object> map = new HashMap<>();
         map.put("keshiList",keshiList);
         map.put("valueList",valueList);
         map.put("rateList",rateList);
+        map.put("rankList",rankList);
         map.put("sum",list.get(0).getSum());
         return map;
     }

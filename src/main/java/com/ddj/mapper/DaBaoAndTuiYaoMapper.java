@@ -1,5 +1,6 @@
 package com.ddj.mapper;
 
+import com.ddj.entity.DaBaoAndTuiYaoInfo;
 import com.ddj.entity.DaBaoAndTuiYaoSource;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,5 +19,7 @@ public interface DaBaoAndTuiYaoMapper {
 
     void deleteByYearAndMonth(@Param("date") String date, @Param("type")String type);
 
-    List<DaBaoAndTuiYaoSource> getData(@Param("date")String date,@Param("type") String type);
+    List<DaBaoAndTuiYaoInfo> getInfo(@Param("date")String date, @Param("type") String type);
+
+    void insertInfo(@Param("date")String date,@Param("type") String type);
 }
