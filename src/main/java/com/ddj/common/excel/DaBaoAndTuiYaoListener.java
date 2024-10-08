@@ -8,6 +8,7 @@ import com.ddj.common.constant.KeShiEnum;
 import com.ddj.common.DateUtils;
 import com.ddj.entity.DaBaoAndTuiYaoSource;
 import com.ddj.mapper.DaBaoAndTuiYaoMapper;
+import com.ddj.mapper.DataInfoMapper;
 import com.ddj.service.DaBaoAndTuiYaoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,13 @@ import java.util.Map;
 public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>> {
 
     @Autowired
-    private DaBaoAndTuiYaoMapper mapper;
+    private DaBaoAndTuiYaoMapper daBaoAndTuiYaoMapper;
 
     @Autowired
     private DaBaoAndTuiYaoService service;
+
+    @Autowired
+    private DataInfoMapper dataInfoMapper;
 
     String date1 = "";
 
@@ -43,9 +47,10 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
     private List<DaBaoAndTuiYaoSource> list1 = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
     List<String> list2 = new ArrayList<>();
 
-    public DaBaoAndTuiYaoListener(DaBaoAndTuiYaoMapper mapper,DaBaoAndTuiYaoService service) {
-        this.mapper = mapper;
+    public DaBaoAndTuiYaoListener(DaBaoAndTuiYaoMapper daBaoAndTuiYaoMapper,DaBaoAndTuiYaoService service,DataInfoMapper dataInfoMapper) {
+        this.daBaoAndTuiYaoMapper = daBaoAndTuiYaoMapper;
         this.service = service;
+        this.dataInfoMapper = dataInfoMapper;
     }
 
 
@@ -53,7 +58,7 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
         log.info("解析到一条数据:{}", JSON.toJSONString(data));
         setData(data);
         if (list1.size() >= BATCH_COUNT) {
-            mapper.insertAll(list1);
+            daBaoAndTuiYaoMapper.insertAll(list1);
             list1 = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
         }
     }
@@ -75,9 +80,9 @@ public class DaBaoAndTuiYaoListener implements ReadListener<Map<Integer, String>
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        if (!list1.isEmpty()){ mapper.insertAll(list1);}
+        if (!list1.isEmpty()){ daBaoAndTuiYaoMapper.insertAll(list1);}
         // 插入数据到详情表
-        mapper.insertInfo(DateUtils.getYearAndMonth(date1),service.getType());
+        dataInfoMapper.insertInfo(DateUtils.getYearAndMonth(date1),service.getType());
         log.info("数据存储完成！");
     }
 }

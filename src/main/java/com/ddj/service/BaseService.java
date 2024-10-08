@@ -3,7 +3,9 @@ package com.ddj.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ddj.mapper.DataInfoMapper;
 import org.apache.poi.ss.formula.functions.T;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -19,6 +21,8 @@ import java.util.function.Function;
 @Service
 public class BaseService implements IService<T> {
 
+    @Autowired
+    private DataInfoMapper dataInfoMapper;
 
     @Override
     public boolean saveBatch(Collection<T> entityList) {

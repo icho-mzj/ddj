@@ -2,6 +2,7 @@ package com.ddj.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddj.entity.YiZhuEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface YiZhuMapper extends BaseMapper<YiZhuEntity> {
 
     void insertAll(List<YiZhuEntity> list);
 
-    void deleteByYearAndMonth(String date);
+    void deleteSource(String date);
 
 }

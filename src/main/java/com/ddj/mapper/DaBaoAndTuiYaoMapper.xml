@@ -15,53 +15,9 @@
         </foreach>
     </insert>
 
-    <delete id="deleteByYearAndMonth" parameterType="String">
-        DELETE FROM dabao_tuiyao_source WHERE date like CONCAT(#{date},'%') AND type = #{type}
+    <delete id="deleteSource" parameterType="String">
+        DELETE FROM dabao_tuiyao_source WHERE date like CONCAT(#{date},'%') AND type = #{type};
     </delete>
-
-    <select id="getInfo" resultType="com.ddj.entity.DaBaoAndTuiYaoInfo">
-        SELECT
-            date,
-            keshi,
-            value,
-            rate,
-            (SELECT Count(1) + 1 FROM dabao_tuiyao_info
-                WHERE value> a.value AND date LIKE CONCAT('202407', '%') AND type = #{type}
-            )as rank,
-            sum
-        FROM dabao_tuiyao_info a
-        ORDER BY value DESC
-    </select>
-
-    <insert id="insertInfo" parameterType="String">
-        INSERT INTO dabao_tuiyao_info
-            (date,keshi,value,rate,sum,type)
-            (
-                SELECT
-                    date,
-                    keshi,
-                    SUM(VALUE) value,
-                    ROUND((SUM(VALUE) / b.t) * 100, 2) rate,
-                    b.t sum,
-                    type
-                FROM
-                    dabao_tuiyao_source a,
-                    (
-                        SELECT
-                            SUM(VALUE) t
-                        FROM
-                            dabao_tuiyao_source
-                        WHERE
-                            date LIKE CONCAT(#{date},'%') AND type = #{type}
-                    ) b
-                WHERE
-                    date LIKE CONCAT(#{date},'%') AND type = #{type}
-                GROUP BY
-                    keshi
-                HAVING
-                    SUM(VALUE) != 0
-            )
-    </insert>
 
 
 </mapper>

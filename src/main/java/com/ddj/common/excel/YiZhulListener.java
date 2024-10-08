@@ -5,6 +5,7 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.fastjson.JSON;
 import com.ddj.entity.YiZhuEntity;
 import com.ddj.common.DateUtils;
+import com.ddj.mapper.DataInfoMapper;
 import com.ddj.mapper.YiZhuMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,20 @@ import java.util.List;
 public class YiZhulListener implements ReadListener<YiZhuEntity> {
 
     @Autowired
-    private YiZhuMapper mapper;
+    private YiZhuMapper yiZhuMapper;
+
+    @Autowired
+    private DataInfoMapper dataInfoMapper;
 
     private final List<YiZhuEntity> list = new ArrayList<>();
 
-    public YiZhulListener(YiZhuMapper mapper) {
-        this.mapper = mapper;
+    public YiZhulListener(YiZhuMapper yiZhuMapper,DataInfoMapper dataInfoMapper) {
+        this.yiZhuMapper = yiZhuMapper;
+        this.dataInfoMapper = dataInfoMapper;
     }
+
+    private static String Date;
+    private final static String TYPE = "yizhu";
 
     /**
      * 这个每一条数据解析都会来调用
@@ -40,7 +48,8 @@ public class YiZhulListener implements ReadListener<YiZhuEntity> {
     @Override
     public void invoke(YiZhuEntity data, AnalysisContext context) {
         log.info("解析到一条数据:{}", JSON.toJSONString(data));
-        data.setDate(DateUtils.cleaning(data.getDate()));
+        Date = DateUtils.cleaning(data.getDate());
+        data.setDate(Date);
         list.add(data);
     }
 
@@ -52,10 +61,11 @@ public class YiZhulListener implements ReadListener<YiZhuEntity> {
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
         if (list.isEmpty()) throw new RuntimeException();
-
-        mapper.deleteByYearAndMonth(DateUtils.getYearAndMonth(list.get(0).getDate()));
-        mapper.insertAll(list);
+        yiZhuMapper.deleteSource(DateUtils.getYearAndMonth(list.get(0).getDate()));
+        dataInfoMapper.deleteInfo(Date,TYPE);
+        yiZhuMapper.insertAll(list);
         log.info("共{}条数据存储完成！",list.size());
+        dataInfoMapper.insertInfo(DateUtils.getYearAndMonth(Date),TYPE);
     }
 
 }

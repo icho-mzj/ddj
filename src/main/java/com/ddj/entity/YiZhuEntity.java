@@ -8,7 +8,7 @@ import lombok.Data;
 public class YiZhuEntity {
 
   private String date;
-  private String bingqu;
+  private String keshi;
   private String zhuyuanhao;
   private String yizhu;
   private String buhelileixing;

@@ -8,7 +8,7 @@
         <foreach collection="list" index="index" item="item" separator=",">
             (
              #{item.date},
-             #{item.bingqu},
+             #{item.keshi},
              #{item.zhuyuanhao},
              #{item.yizhu},
              #{item.buhelileixing},
@@ -20,7 +20,7 @@
         </foreach>
     </insert>
 
-    <delete id="deleteByYearAndMonth" parameterType="String">
+    <delete id="deleteSource" parameterType="String">
         delete from yizhu_source where date like CONCAT(#{item},'%')
     </delete>
 

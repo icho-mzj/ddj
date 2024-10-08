@@ -1,8 +1,12 @@
 server:
   port: 10086
+  servlet:
+    context-path: /ddj
+
 logging:
   level:
     com.ddj: debug
+
 mybatis:
   type-aliases-package: com.ddj.bean # 别名扫描
   configuration:
