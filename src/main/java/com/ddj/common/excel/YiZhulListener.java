@@ -3,10 +3,10 @@ package com.ddj.common.excel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.fastjson.JSON;
-import com.ddj.entity.YiZhuEntity;
-import com.ddj.common.DateUtils;
-import com.ddj.mapper.DataInfoMapper;
-import com.ddj.mapper.YiZhuMapper;
+import com.ddj.entity.logic.YiZhuEntity;
+import com.ddj.common.utils.DateUtils;
+import com.ddj.mapper.logic.DataInfoMapper;
+import com.ddj.mapper.logic.YiZhuMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,7 +65,7 @@ public class YiZhulListener implements ReadListener<YiZhuEntity> {
         dataInfoMapper.deleteInfo(Date,TYPE);
         yiZhuMapper.insertAll(list);
         log.info("共{}条数据存储完成！",list.size());
-        dataInfoMapper.insertInfo(DateUtils.getYearAndMonth(Date),TYPE);
+        dataInfoMapper.insertYizhuInfo(DateUtils.getYearAndMonth(Date));
     }
 
 }

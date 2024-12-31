@@ -3,7 +3,7 @@ package com.ddj.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ddj.mapper.DataInfoMapper;
+import com.ddj.mapper.logic.DataInfoMapper;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.ddj.mapper.logic.DaBaoAndTuiYaoMapper">
+
+    <insert id="insertAll" parameterType="com.ddj.entity.logic.DaBaoAndTuiYaoSource">
+        INSERT INTO dabao_tuiyao_source VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{item.date},
+            #{item.keshi},
+            #{item.value},
+            #{item.type}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteSource" parameterType="String">
+        DELETE FROM dabao_tuiyao_source WHERE date like CONCAT(#{date},'%') AND type = #{type};
+    </delete>
+
+
+</mapper>

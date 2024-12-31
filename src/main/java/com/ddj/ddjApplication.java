@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@MapperScan("com.ddj.mapper")
+@MapperScan({"com.ddj.mapper","com.ddj.mapper.logic"})
 public class ddjApplication {
     public static void main(String[] args) {
         SpringApplication.run(ddjApplication.class, args);
